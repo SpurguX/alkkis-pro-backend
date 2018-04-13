@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AlkkisProAdminPage</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+</head>
+<body>
+<div class="container">
+	<h1>Hallinnointi</h1>
+	
+	<form action="/lisaa_juoma" method="post" id="lisays_form">
+		<div class="form-group">
+		    <label for="juoma_nimi">Juoman nimi: </label>
+		    <input type="text" class="form-control" id="juoma_nimi" name="juoma_nimi">
+		</div>
+		<div class="form-group">
+		    <label for="tilavuus">Tilavuus: </label>
+		    <input type="text" class="form-control" id="tilavuus" name="tilavuus">
+		</div>
+		<div class="form-group">
+		    <label for="vahvuus">Vahvuus: </label>
+		    <input type="text" class="form-control" id="vahvuus" name="vahvuus">
+	  	</div>
+	  	<div class="form-group">
+		    <label for="annokset">Annokset: </label> <span id="annokset_teksti"></span>
+		    <input type="hidden" class="form-control" id="annokset" name="annokset">
+	  	</div>
+	  <button type="submit" class="btn btn-default" name="submit_btn">Submit</button>
+	</form> 
+</div>
+</body>
+</html>
+
+<script>
+function laskeAnnokset(tilavuus, vahvuus) {
+	var etanolinTiheys = 789;
+	return tilavuus * (vahvuus / 100) * etanolinTiheys / 12.00;
+}
+
+$(".form-control").change(function() {
+	var tilavuus = $("#tilavuus").val();
+	var vahvuus = $("#vahvuus").val();
+	$("#annokset_teksti").html(laskeAnnokset(tilavuus, vahvuus));
+	$("#annokset").val(laskeAnnokset(tilavuus, vahvuus));
+	console.log($("#annokset").val());
+});
+
+$("#lisays_form").submit(function(event) {
+	
+}); 
+	
+</script>
