@@ -28,7 +28,7 @@ public class DrinkEntry {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "drink_id")
-	private Juoma juoma;
+	private Drink drink;
 	
 	@NotNull 
 	private int drink_quantity; 
@@ -38,12 +38,12 @@ public class DrinkEntry {
 	
 	public DrinkEntry() {}
 	
-	public DrinkEntry(long drink_entry_id, @NotNull Date drink_date, @NotNull Juoma juoma,
+	public DrinkEntry(long drink_entry_id, @NotNull Date drink_date, @NotNull Drink drink,
 			@NotNull int drink_quantity, @NotNull Double drink_entry_units) {
 		super();
 		this.drink_entry_id = drink_entry_id;
 		this.drink_date = drink_date;
-		this.juoma = juoma;
+		this.drink = drink;
 		this.drink_quantity = drink_quantity;
 		this.drink_entry_units = drink_entry_units;
 	}
@@ -59,11 +59,11 @@ public class DrinkEntry {
 	public void setDrink_date(Date drink_date) {
 		this.drink_date = drink_date;
 	}
-	public Juoma getJuoma() {
-		return juoma;
+	public Drink getDrink() {
+		return drink;
 	}
-	public void setJuoma(Juoma juoma) {
-		this.juoma = juoma;
+	public void setDrink(Drink drink) {
+		this.drink = drink;
 	}
 	public int getDrink_quantity() {
 		return drink_quantity;
