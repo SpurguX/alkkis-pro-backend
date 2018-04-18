@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -46,4 +48,16 @@ public class AlkkisController {
 	public String adminsivu() {
 		return "admin.html";
 	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/add_entry", method=RequestMethod.POST)
+	public @ResponseBody String addEntry(HttpServletRequest request, @RequestBody DrinkEntry[] entry) {
+		for (DrinkEntry de : entry ) {
+			de.setDrink(drinkRepository.findById(de.getDrink().getDrink_id()));
+			drinkEntryRepository.save(de);
+		}
+		
+		return "Added: " +entry;
+	}
+	
 }

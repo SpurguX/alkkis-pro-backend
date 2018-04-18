@@ -78,5 +78,11 @@ public class DrinkEntry {
 		this.drink_entry_units = drink_entry_units;
 	}
 
+	@Override
+	public String toString() {
+		return "DrinkEntry [drink_entry_id=" + drink_entry_id + ", drink_date=" + drink_date + ", drink=" + drink
+				+ ", drink_quantity=" + drink_quantity + ", drink_entry_units=" + drink_entry_units + "]";
+	}
+
 	
 }
