@@ -49,15 +49,14 @@ public class AlkkisController {
 		return "admin.html";
 	}
 	
-	@CrossOrigin
 	@RequestMapping(value = "/add_entry", method=RequestMethod.POST)
-	public @ResponseBody String addEntry(HttpServletRequest request, @RequestBody DrinkEntry[] entry) {
-		for (DrinkEntry de : entry ) {
+	public @ResponseBody String addEntry(HttpServletRequest request, @RequestBody DrinkEntry[] entries) {
+		for (DrinkEntry de : entries ) {
 			de.setDrink(drinkRepository.findById(de.getDrink().getDrink_id()));
 			drinkEntryRepository.save(de);
 		}
 		
-		return "Added: " +entry;
+		return "Added: " +entries;
 	}
 	
 }
