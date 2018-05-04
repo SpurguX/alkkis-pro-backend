@@ -27,11 +27,11 @@ public class AlkkisController {
 	private DrinkEntryRepository drinkEntryRepository;
 
 	@RequestMapping(value = "/add_drink", method=RequestMethod.POST)
-	public @ResponseBody String lisaaPOST(HttpServletRequest request, @RequestParam(value="drink_name") String name, 
+	public @ResponseBody Drink addDrink(HttpServletRequest request, @RequestParam(value="drink_name") String name, 
 			@RequestParam(value="volume") Double volume, @RequestParam(value="alc_content") Double alc_content, @RequestParam(value="units") Double units) {
 		Drink newDrink = new Drink(name, volume, alc_content, units);
 		drinkRepository.save(newDrink);
-		return "Added: " + newDrink;
+		return newDrink;
 	}
 	
 	@GetMapping(path="/all_drinks")
