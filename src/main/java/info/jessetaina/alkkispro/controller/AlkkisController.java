@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import info.jessetaina.alkkispro.model.DrinkRepository;
+import info.jessetaina.alkkispro.model.SavedDrink;
+import info.jessetaina.alkkispro.model.SavedDrinkRepository;
 import info.jessetaina.alkkispro.model.DrinkEntry;
 import info.jessetaina.alkkispro.model.DrinkEntryRepository;
 import info.jessetaina.alkkispro.model.Drink;
@@ -24,6 +26,8 @@ public class AlkkisController {
 	@Autowired
 	private DrinkRepository drinkRepository;
 	@Autowired
+	private SavedDrinkRepository savedDrinkRepository;
+	@Autowired
 	private DrinkEntryRepository drinkEntryRepository;
 
 	@RequestMapping(value = "/add_drink", method=RequestMethod.POST)
@@ -32,6 +36,19 @@ public class AlkkisController {
 		Drink newDrink = new Drink(name, volume, alc_content, units);
 		drinkRepository.save(newDrink);
 		return newDrink;
+	}
+	
+	@RequestMapping(value = "/save_other_drink", method=RequestMethod.POST)
+	public @ResponseBody SavedDrink saveOtherDrink(HttpServletRequest request, @RequestParam(value="drink_name") String name, 
+			@RequestParam(value="volume") Double volume, @RequestParam(value="alc_content") Double alc_content, @RequestParam(value="units") Double units) {
+		SavedDrink newSavedDrink = new SavedDrink(name, volume, alc_content, units);
+		savedDrinkRepository.save(newSavedDrink);
+		return newSavedDrink;
+	}
+	
+	@GetMapping(path="/all_saved_drinks")
+	public @ResponseBody Iterable<SavedDrink> fetchSaveddrinks() {
+		return savedDrinkRepository.findAll();
 	}
 	
 	@GetMapping(path="/all_drinks")
