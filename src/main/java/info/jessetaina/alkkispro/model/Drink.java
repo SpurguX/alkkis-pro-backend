@@ -11,60 +11,87 @@ public class Drink {
 	
 	@Id
 	@GeneratedValue (strategy=GenerationType.AUTO)
-	private long drink_id;
+	private long drinkId;
 	
-	@NotNull private String drink_name;
-	@NotNull private double volume;
-	@NotNull private double alc_content;
-	@NotNull private double units;
+	@NotNull 
+	private String drinkName;
 	
+	@NotNull 
+	private double volume;
+	
+	@NotNull
+	private double alcContent;
+	
+	@NotNull 
+	private double units;
+	
+	@NotNull
+	private boolean isDefault; 
 	
 	public Drink() {};
 	
 	public Drink(@NotNull String drink_name, @NotNull double volume, @NotNull double alc_content,
-			@NotNull double units) {
+			@NotNull double units, @NotNull boolean is_default) {
 		super();
-		this.drink_name = drink_name;
+		this.drinkName = drink_name;
 		this.volume = volume;
-		this.alc_content = alc_content;
+		this.alcContent = alc_content;
 		this.units = units;
+		this.isDefault = is_default; 
 	}
 
-	public long getDrink_id() {
-		return drink_id;
+	public long getDrinkId() {
+		return drinkId;
 	}
-	public void setDrink_id(long drink_id) {
-		this.drink_id = drink_id;
+	
+	public void setDrinkId(long drink_id) {
+		this.drinkId = drink_id;
 	}
-	public String getDrink_name() {
-		return drink_name;
+	
+	public String getDrinkName() {
+		return drinkName;
 	}
-	public void setDrink_name(String drink_name) {
-		this.drink_name = drink_name;
+	
+	public void setDrinkName(String drink_name) {
+		this.drinkName = drink_name;
 	}
+	
 	public double getVolume() {
 		return volume;
 	}
+	
 	public void setVolume(double volume) {
 		this.volume = volume;
 	}
-	public double getAlc_content() {
-		return alc_content;
+	
+	public double getAlcContent() {
+		return alcContent;
 	}
-	public void setAlc_content(double alc_content) {
-		this.alc_content = alc_content;
+	
+	public void setAlcContent(double alc_content) {
+		this.alcContent = alc_content;
 	}
+	
 	public double getUnits() {
 		return units;
 	}
+	
 	public void setUnits(double units) {
 		this.units = units;
 	}
-	
+		
+	public boolean isDefault() {
+		return isDefault;
+	}
+
+	public void setDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
 	@Override
 	public String toString() {
-		return "Drink [drink_id=" + drink_id + ", drink_name=" + drink_name + ", volume=" + volume + ", alc_content="
-				+ alc_content + ", units=" + units + "]";
+		return "Drink [drinkId=" + drinkId + ", drinkName=" + drinkName + ", volume=" + volume + ", alcContent="
+				+ alcContent + ", units=" + units + ", isDefault=" + isDefault + "]";
 	}
 	
 	
