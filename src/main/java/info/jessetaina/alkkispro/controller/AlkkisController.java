@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 import info.jessetaina.alkkispro.model.DrinkEntry;
 import info.jessetaina.alkkispro.model.DrinkEntryRepository;
 import info.jessetaina.alkkispro.model.DrinkRepository;
@@ -33,8 +35,8 @@ public class AlkkisController {
 	}
 	
 	@RequestMapping(value = "/save_other_drink", method=RequestMethod.POST)
-	public @ResponseBody Drink saveOtherDrink(HttpServletRequest request, @RequestParam(value="drink_name") String name, 
-			@RequestParam(value="volume") Double volume, @RequestParam(value="alc_content") Double alc_content, @RequestParam(value="units") Double units) {
+	public @ResponseBody Drink saveOtherDrink(HttpServletRequest request, @RequestParam(value="drinkName") String name, 
+			@RequestParam(value="volume") Double volume, @RequestParam(value="alcContent") Double alc_content, @RequestParam(value="units") Double units) {
 		Drink newSavedDrink = new Drink(name, volume, alc_content, units, false);
 		drinkRepository.save(newSavedDrink);
 		return newSavedDrink;
@@ -66,11 +68,22 @@ public class AlkkisController {
 			System.out.println(de.getDrink());
 			System.out.println(de.getDrink().getDrinkId());
 			de.setDrink(drinkRepository.findById(de.getDrink().getDrinkId()));
-
 			drinkEntryRepository.save(de);
-		}
-		
-		return "Added: " +entries;
+		}	
+		return "Added: " + entries;
+	}	
+	
+	@RequestMapping(value = "/delete_entry", method=RequestMethod.POST)
+		public @ResponseBody String deleteEntry(HttpServletRequest request, @RequestParam(value="drink_entry_id") String drink_entry_id) {
+			long idLong = Long.parseLong(drink_entry_id);
+			drinkEntryRepository.deleteById(idLong);	
+		return "Deleted: " + drink_entry_id;
 	}
+	
+	@RequestMapping(value = "/edit_entry", method=RequestMethod.POST)
+	public @ResponseBody String editEntry(HttpServletRequest request, @RequestBody DrinkEntry entry) {
+		drinkEntryRepository.save(entry);
+	return "Updated: " + entry;
+}
 	
 }
