@@ -26,7 +26,9 @@ public class Drink {
 	private double units;
 	
 	@NotNull
-	private boolean isDefault; 
+	private boolean isDefault;
+	
+	private String icon;
 	
 	public Drink() {};
 	
@@ -88,11 +90,17 @@ public class Drink {
 		this.isDefault = isDefault;
 	}
 
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
 	@Override
 	public String toString() {
 		return "Drink [drinkId=" + drinkId + ", drinkName=" + drinkName + ", volume=" + volume + ", alcContent="
 				+ alcContent + ", units=" + units + ", isDefault=" + isDefault + "]";
 	}
-	
-	
 }
