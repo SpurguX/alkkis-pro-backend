@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,8 +93,11 @@ public class AlkkisController {
 	// 	return "Deleted: " + drink_entry_id;
 	// }
 
-	@RequestMapping(value = "/edit_entry", method = RequestMethod.POST)
+	@PutMapping(value = "/edit_entry")
 	public @ResponseBody String editEntry(HttpServletRequest request, @RequestBody DrinkEntry entry) {
+		// XXX Would PATCH make more sense here? Could avoid having to fetch user.
+		User user = userRepository.findByUsername(request.getRemoteUser());
+		entry.setUser(user);
 		drinkEntryRepository.save(entry);
 		return "Updated: " + entry;
 	}
