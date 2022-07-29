@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.MediaType;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import info.jessetaina.alkkispro.model.DrinkEntry;
 import info.jessetaina.alkkispro.model.DrinkEntryRepository;
 import info.jessetaina.alkkispro.model.DrinkRepository;
 import info.jessetaina.alkkispro.model.Drink;
+import info.jessetaina.alkkispro.model.User;
+import info.jessetaina.alkkispro.model.UserRepository;
 
 @Controller
 public class AlkkisController {
@@ -24,6 +27,8 @@ public class AlkkisController {
 	private DrinkRepository drinkRepository;
 	@Autowired
 	private DrinkEntryRepository drinkEntryRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@RequestMapping(value = "/add_drink", method = RequestMethod.POST)
 	public @ResponseBody Drink addDrink(HttpServletRequest request, @RequestParam(value = "drink_name") String name,
@@ -88,4 +93,16 @@ public class AlkkisController {
 		return "Updated: " + entry;
 	}
 
+	@GetMapping(path = "/users")
+	public @ResponseBody Iterable<User> fetchUser() {
+		return userRepository.findAll();
+	}
+
+	@RequestMapping(value = "/create_user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, 
+	produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String createUser(HttpServletRequest request, @RequestBody User user) {
+		System.out.println(user);
+		userRepository.save(user);
+		return user.getUsername();
+	}
 }
