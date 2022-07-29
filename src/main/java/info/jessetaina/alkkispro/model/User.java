@@ -2,6 +2,7 @@ package info.jessetaina.alkkispro.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -26,11 +27,11 @@ public class User {
 	private Date creation_date;
 
   @NotNull
+  @Column(unique=true)
 	private String username;
 
   @NotNull
-	// @JsonIgnore <-- this caused a problem with creating user (that's probably why DTO is sometimes used)
-  // TODO make sure password isn't exposed in a JSON response
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 
 	@Temporal(TemporalType.DATE)
@@ -76,6 +77,24 @@ public class User {
     String encodedPassword = bcryptEncoder.encode(password);
 		this.password = encodedPassword;
 	}
+
+
+  public long getId() {
+    return this.id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public Date getPassword_set_date() {
+    return this.password_set_date;
+  }
+
+  public void setPassword_set_date(Date password_set_date) {
+    this.password_set_date = password_set_date;
+  }
+
 
   @Override
   public String toString() {
