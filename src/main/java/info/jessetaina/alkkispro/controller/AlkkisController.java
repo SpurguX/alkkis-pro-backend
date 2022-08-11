@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import info.jessetaina.alkkispro.model.DrinkEntry;
 import info.jessetaina.alkkispro.model.DrinkEntryRepository;
@@ -71,11 +73,6 @@ public class AlkkisController {
 	public @ResponseBody String addEntry(HttpServletRequest request, @RequestBody DrinkEntry[] entries) {
 		for (DrinkEntry de : entries) {
 			User user = userRepository.findByUsername(request.getRemoteUser());
-			System.out.print("@PostMapping(value = \"/entry\") USER: ");
-			System.out.println(user);
-
-			System.out.println(de.getDrink());
-			System.out.println(de.getDrink().getDrinkId());
 			de.setDrink(drinkRepository.findById(de.getDrink().getDrinkId()));
 			de.setUser(user);
 			drinkEntryRepository.save(de);
@@ -108,14 +105,40 @@ public class AlkkisController {
 	}
 
 	@RequestMapping(value = "/create_user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String createUser(HttpServletRequest request, @RequestBody User user) {
+	public @ResponseBody String createUser(HttpServletRequest request, @RequestBody User newUser) {
 		String currentUser = request.getRemoteUser();
 		if (!currentUser.equals("adminjesse")) {
 			throw new AccessDeniedException("Only allowed for admin");
 		}
 
-		userRepository.save(user);
-		return user.getUsername();
+		userRepository.save(newUser);
+		return newUser.getUsername();
+	}
+
+	@PostMapping(value = "/change_password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String addEntry(HttpServletRequest request, @RequestBody JsonNode data) {
+		User currentUser = userRepository.findByUsername(request.getRemoteUser());
+		JsonNode passwordFieldNode = data.get("password");
+		if (
+			// The field is either not present in parentNode, or explicitly set to null.
+			passwordFieldNode == null ||
+			passwordFieldNode.isNull() ||
+			!passwordFieldNode.isTextual()
+		) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Required field 'password' is missing or not valid.");
+		}
+
+		String newPassword = passwordFieldNode.asText();
+
+		int minPasswordLength = 8;
+		if (newPassword.length() < minPasswordLength) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be at least " + minPasswordLength + " characters long.");
+		}
+
+		currentUser.setPassword(newPassword);
+		userRepository.save(currentUser);
+
+		return "OK";
 	}
 
 	// Not in use atm. Need to create auth logic for backend to use this.

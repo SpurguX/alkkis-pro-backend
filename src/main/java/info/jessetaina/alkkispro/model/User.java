@@ -41,7 +41,6 @@ public class User {
 
   public User(@NotNull String username, @NotNull String password) {
     this.username = username;
-    // this.password = password;
     this.setPassword(password);
   }
 
@@ -72,7 +71,9 @@ public class User {
   }
 
 	public void setPassword(String password) {
-    this.password_set_date = new Date(System.currentTimeMillis());
+    Date presentMoment = new Date(System.currentTimeMillis());
+    this.setPassword_set_date(presentMoment);
+
     BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
     String encodedPassword = bcryptEncoder.encode(password);
 		this.password = encodedPassword;
@@ -101,7 +102,6 @@ public class User {
     return "User: + " +
     this.id + "; " +
     this.username + "; " +
-    // this.password + "; " +
     "created: " + this.creation_date;
   }
 }
