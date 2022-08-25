@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.Column;
 
 @Entity
 public class DrinkEntry {
@@ -24,7 +25,10 @@ public class DrinkEntry {
 	@NotNull
 	@Basic
 	@Temporal(TemporalType.DATE)
-	private Date drink_date;
+	 // Original field name was drink_date. Changed to make the repository's find method (findAllByDrinkingDate) map to the correct field.
+	@Column(name="drink_date")
+	@JsonProperty("drink_date")
+	private Date drinkingDate;
 
 	@NotNull
 	@ManyToOne
@@ -46,11 +50,11 @@ public class DrinkEntry {
 	public DrinkEntry() {
 	}
 
-	public DrinkEntry(long drink_entry_id, @NotNull Date drink_date, @NotNull Drink drink,
+	public DrinkEntry(long drink_entry_id, @NotNull Date drinkingDate, @NotNull Drink drink,
 			@NotNull int drink_quantity, @NotNull Double drink_entry_units) {
 		super();
 		this.drink_entry_id = drink_entry_id;
-		this.drink_date = drink_date;
+		this.drinkingDate = drinkingDate;
 		this.drink = drink;
 		this.drink_quantity = drink_quantity;
 		this.drink_entry_units = drink_entry_units;
@@ -64,12 +68,12 @@ public class DrinkEntry {
 		this.drink_entry_id = drink_entry_id;
 	}
 
-	public Date getDrink_date() {
-		return drink_date;
+	public Date getdrinkingDate() {
+		return drinkingDate;
 	}
 
-	public void setDrink_date(Date drink_date) {
-		this.drink_date = drink_date;
+	public void setdrinkingDate(Date drinkingDate) {
+		this.drinkingDate = drinkingDate;
 	}
 
 	public Drink getDrink() {
@@ -106,7 +110,7 @@ public class DrinkEntry {
 
 	@Override
 	public String toString() {
-		return "DrinkEntry [drink_entry_id=" + drink_entry_id + ", drink_date=" + drink_date + ", drink=" + drink
+		return "DrinkEntry [drink_entry_id=" + drink_entry_id + ", drinkingDate=" + drinkingDate + ", drink=" + drink
 				+ ", drink_quantity=" + drink_quantity + ", drink_entry_units=" + drink_entry_units + ", user=" + user + "]";
 	}
 }

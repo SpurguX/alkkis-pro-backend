@@ -1,5 +1,7 @@
 package info.jessetaina.alkkispro.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,11 @@ public class AlkkisController {
 	}
 
 	@GetMapping(path = "/entry")
-	public @ResponseBody Iterable<DrinkEntry> fetchAllEntries() {
+	public @ResponseBody Iterable<DrinkEntry> fetchAllEntries(@RequestParam(value = "today_only", defaultValue = "false") Boolean todayOnly) {
+		if (todayOnly) {
+			Date today = new Date();
+			return drinkEntryRepository.findAllByDrinkingDate(today);
+		}
 		return drinkEntryRepository.findAll();
 	}
 
